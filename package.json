@@ -59,7 +59,8 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/test/"
+      "/test/",
+      "testing-utils.ts"
     ],
     "coverageThreshold": {
       "global": {
@@ -101,5 +102,8 @@
     "typescript": "^2.6.2",
     "validate-commit-msg": "^2.12.2",
     "tsls": "0.0.2"
+  },
+  "dependencies": {
+    "@acamica/task": "^0.4.0-rc-2"
   }
 }
