@@ -1,5 +1,5 @@
 import { Task, operators } from '@acamica/task'
-import { assertFork, jestAssertNever, jestAssertUntypedNeverCalled } from './testing-utils'
+import { assertFork, jestAssertNever, jestAssertUntypedNeverCalled } from '../testing-utils'
 import { share } from './share'
 
 const { map } = operators

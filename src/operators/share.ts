@@ -1,5 +1,5 @@
 import { Task } from '@acamica/task'
-import { toPromise } from './to-promise'
+import { toPromise } from '../to-promise'
 
 export function share<T, E>() {
   let result: Promise<T> | undefined
