@@ -5,7 +5,8 @@
     "outDir": "dist/lib",
     "typeRoots": [
       "node_modules/@types"
-    ]
+    ],
+    "paths": { "@ts-task/utils": ["./src/ts-task-utils"] }
   },
   "include": [
     "src"

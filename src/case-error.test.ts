@@ -3,15 +3,15 @@ import { assertFork, jestAssertNever, jestAssertUntypedNeverCalled } from './tes
 import { caseError } from './case-error'
 
 class DivisionByZeroError extends Error {
-  private type = 'DivisionByZeroError'
+  type = 'DivisionByZeroError'
 }
 
 class DontLikePairsError extends Error {
-  private type = 'IDontLikePairsError'
+  type = 'IDontLikePairsError'
 }
 
 class NewTypeOfError extends Error {
-  private type = 'NewTypeOfError'
+  type = 'NewTypeOfError'
 }
 
 // function divideTask (numerator: number, denominator: number) {

@@ -17,6 +17,6 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "baseUrl": ".",
-        "paths": { "@ts-task/utils": ["../../src"] }
+        "paths": { "@ts-task/utils": ["../../src/ts-task-utils"] }
     }
 }
