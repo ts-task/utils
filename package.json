@@ -1,5 +1,5 @@
 {
-  "name": "ts-task-utils",
+  "name": "@ts-task/utils",
   "version": "0.0.0",
   "description": "",
   "keywords": [],
@@ -12,7 +12,7 @@
   "author": "Gonza Gluzman <dggluz@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tsall/ts-task-utils"
+    "url": "https://github.com/ts-task/utils"
   },
   "license": "MIT",
   "engines": {
@@ -73,7 +73,8 @@
         "statements": 95
       }
     },
-    "collectCoverage": true
+    "collectCoverage": true,
+    "testURL": "http://localhost/"
   },
   "prettier": {
     "semi": false,
@@ -109,6 +110,6 @@
     "validate-commit-msg": "^2.12.2"
   },
   "dependencies": {
-    "@acamica/task": "^0.4.0-rc-2"
+    "@ts-task/task": "0.4.0"
   }
 }

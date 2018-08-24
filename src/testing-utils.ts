@@ -1,4 +1,4 @@
-import { UncaughtError } from '@acamica/task'
+import { UncaughtError } from '@ts-task/task'
 
 export const jestAssertNever = (cb: jest.DoneCallback) => (obj: never | UncaughtError) =>
   cb('this should never happen', obj)

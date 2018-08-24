@@ -1,17 +1,17 @@
-import { Task, UncaughtError } from '@acamica/task'
-import { assertFork, jestAssertNever, jestAssertUntypedNeverCalled } from './testing-utils'
-import { caseError } from './case-error'
+import { Task, UncaughtError } from '@ts-task/task';
+import { assertFork, jestAssertNever, jestAssertUntypedNeverCalled } from './testing-utils';
+import { caseError } from './case-error';
 
 class DivisionByZeroError extends Error {
-  type = 'DivisionByZeroError'
+  type = 'DivisionByZeroError';
 }
 
 class DontLikePairsError extends Error {
-  type = 'IDontLikePairsError'
+  type = 'IDontLikePairsError';
 }
 
 class NewTypeOfError extends Error {
-  type = 'NewTypeOfError'
+  type = 'NewTypeOfError';
 }
 
 // function divideTask (numerator: number, denominator: number) {

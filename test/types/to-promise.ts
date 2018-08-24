@@ -1,5 +1,5 @@
 import { toPromise } from '@ts-task/utils';
-import { Task } from '@acamica/task';
+import { Task } from '@ts-task/task';
 
 // We will test `toPromise` that just transform a Task into a Promise, losing the typings on the error.
 

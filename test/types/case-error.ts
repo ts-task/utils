@@ -1,5 +1,5 @@
 import { caseError } from '@ts-task/utils';
-import { Task } from '@acamica/task';
+import { Task } from '@ts-task/task';
 
 // `caseError` is intended to handle an error if it's instance of an specific class.
 

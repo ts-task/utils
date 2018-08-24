@@ -1,4 +1,4 @@
-import { Task } from '@acamica/task'
+import { Task } from '@ts-task/task'
 import { toPromise } from '../to-promise'
 
 export function share<T, E>() {

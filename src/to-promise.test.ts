@@ -1,5 +1,5 @@
 import { toPromise } from './to-promise'
-import { Task } from '@acamica/task'
+import { Task } from '@ts-task/task'
 
 describe('toPromise', () => {
   it('toPromise works with resolved Tasks', () => {

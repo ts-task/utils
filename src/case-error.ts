@@ -1,4 +1,4 @@
-import { Task } from '@acamica/task'
+import { Task } from '@ts-task/task'
 
 export type Constructor<T> = { new (...args: any[]): T }
 

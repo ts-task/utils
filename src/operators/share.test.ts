@@ -1,4 +1,4 @@
-import { Task, operators } from '@acamica/task'
+import { Task, operators } from '@ts-task/task'
 import { assertFork, jestAssertNever, jestAssertUntypedNeverCalled } from '../testing-utils'
 import { share } from './share'
 
