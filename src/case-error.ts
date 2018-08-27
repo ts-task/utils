@@ -21,4 +21,3 @@ export function caseError<ErrorToHandle, TResult, EResult>(
     }
   }
 }
-
