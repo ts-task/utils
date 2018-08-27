@@ -7,11 +7,20 @@ import { Task } from '@ts-task/task';
 // It has a `NoNegativesError` public property because TypeScript inference is structural
 class NoNegativesError extends Error {
   NoNegativesError = 'NoNegativesError';
+
+  constructor(public negativeNumber: number) {
+    super(`Ugh! ${negativeNumber} is soooo negative! >:(`);
+  }
 }
 
 // rejectNegative is a function that will return a Task possible rejected with a NoNegativesError
 const rejectNegative = (x: number): Task<number, NoNegativesError> =>
-  x >= 0 ? Task.resolve(x) : Task.reject(new NoNegativesError())
+  x >= 0 ? Task.resolve(x) : Task.reject(new NoNegativesError(x))
+;
+
+// isNoNegativesError is a function that tells us if an error is a NoNegativesError
+const isNoNegativesError = <E> (err: E | NoNegativesError): err is NoNegativesError =>
+  err instanceof NoNegativesError
 ;
 
 // We will tests our `caseError` function with two variables
@@ -30,7 +39,7 @@ const anotherNumber = aNumber // $ExpectType Task<number, NoNegativesError | Unc
 
 // We will also need a function `fixNoNegativesError` that should handle (and resolve)
 // the `NegativesError` case, delegating in `caseError`.
-const fixNoNegativesError = caseError(NoNegativesError, _ => Task.resolve(0));
+const fixNoNegativesError = caseError(isNoNegativesError, _ => Task.resolve(0));
 
 // We try our `fixNoNegativesError` on both Tasks
 const result = aNumber.catch(fixNoNegativesError);
