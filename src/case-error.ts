@@ -1,23 +1,23 @@
-import { Task } from '@ts-task/task'
+import { Task, UncaughtError } from '@ts-task/task'
 
 export type Constructor<T> = { new (...args: any[]): T }
 
-export type IErrorHandler<E, TResult, EResult> = (err: E) => Task<TResult, EResult>
+export type ErrorHandler<ErrorToHandle, TResult, EResult> = (err: ErrorToHandle) => Task<TResult, EResult>
 
-export function caseError<E, TResult, EResult>(
-  errorType: Constructor<E>,
-  errorHandler: IErrorHandler<E, TResult, EResult>
+export function caseError<ErrorToHandle, TResult, EResult>(
+  ErrorType: Constructor<ErrorToHandle>,
+  errorHandler: ErrorHandler<ErrorToHandle, TResult, EResult>
 ) {
-  return function<RE>(
-    err: RE
-  ): RE extends E ? Task<TResult, EResult> : Task<TResult, RE | EResult> {
+  return function <InputError> (
+    err: InputError | ErrorToHandle
+  ): Task<TResult, EResult | Exclude<InputError, ErrorToHandle>> {
     // If the error is of the type we are looking for (E)
-    if (err instanceof errorType) {
+    if (err instanceof ErrorType) {
       // Transform the error
-      return errorHandler(err) as any
+      return errorHandler(err) as any;
     } else {
       // If not, leave as it is
-      return Task.reject(err) as any
+      return Task.reject(err) as any;
     }
   }
 }
