@@ -14,10 +14,10 @@ export function caseError<ErrorToHandle, TResult, EResult>(
     // If the error is of the type we are looking for (E)
     if (err instanceof ErrorType) {
       // Transform the error
-      return errorHandler(err) as any;
+      return errorHandler(err);
     } else {
       // If not, leave as it is
-      return Task.reject(err) as any;
+      return Task.reject(err as Exclude<InputError, ErrorToHandle>);
     }
   }
 }
