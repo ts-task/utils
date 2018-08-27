@@ -60,9 +60,7 @@ describe('caseError:', () => {
     const task = divideTask(2, 0)
 
     // WHEN: We catch and solve the error
-    const result = task
-      .catch(caseError(isDivisionByZeroError, _ => Task.resolve(-1000)))
-    ;
+    const result = task.catch(caseError(isDivisionByZeroError, _ => Task.resolve(-1000)))
     // THEN: The resulting type doesn't have the catched error as a posibility
     //       and the task is resolved with the catched response
     result.fork(jestAssertUntypedNeverCalled(cb), assertFork(cb, n => expect(n).toBe(-1000)))
