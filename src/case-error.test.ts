@@ -18,15 +18,15 @@ interface NewTypeOfError {
   type: 'NewTypeOfError';
 }
 
-const isDivisionByZeroError = <E> (err: E | DivisionByZeroError): err is DivisionByZeroError =>
+const isDivisionByZeroError = (err: any): err is DivisionByZeroError =>
   err && (err as any).errorType === 'DivisionByZeroError'
 ;
 
-const isDontLikeEvenNumbersError = <E> (err: E | DontLikeEvenNumbersError): err is DontLikeEvenNumbersError =>
+const isDontLikeEvenNumbersError = (err: any): err is DontLikeEvenNumbersError =>
   err instanceof DontLikeEvenNumbersError;
 ;
 
-const isNewTypeOfError = <E> (err: E | NewTypeOfError): err is NewTypeOfError =>
+const isNewTypeOfError = (err: any): err is NewTypeOfError =>
   err && (err as any).type === 'NewTypeOfError';
 ;
 
@@ -60,7 +60,9 @@ describe('caseError:', () => {
     const task = divideTask(2, 0)
 
     // WHEN: We catch and solve the error
-    const result = task.catch(caseError(isDivisionByZeroError, _ => Task.resolve(-1000)))
+    const result = task
+      .catch(caseError(isDivisionByZeroError, _ => Task.resolve(-1000)))
+    ;
     // THEN: The resulting type doesn't have the catched error as a posibility
     //       and the task is resolved with the catched response
     result.fork(jestAssertUntypedNeverCalled(cb), assertFork(cb, n => expect(n).toBe(-1000)))
@@ -123,7 +125,7 @@ describe('caseError:', () => {
       )
       .catch(
         caseError(
-          <E> (err: E | UncaughtError): err is UncaughtError =>
+          (err: any): err is UncaughtError =>
             err instanceof UncaughtError,
           err =>
             Task.resolve(`Could not compute: UncaughtError ${err}`)

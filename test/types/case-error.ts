@@ -19,7 +19,7 @@ const rejectNegative = (x: number): Task<number, NoNegativesError> =>
 ;
 
 // isNoNegativesError is a function that tells us if an error is a NoNegativesError
-const isNoNegativesError = <E> (err: E | NoNegativesError): err is NoNegativesError =>
+const isNoNegativesError = (err: any): err is NoNegativesError =>
   err instanceof NoNegativesError
 ;
 
