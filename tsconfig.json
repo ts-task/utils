@@ -6,6 +6,7 @@
     "typeRoots": [
       "node_modules/@types"
     ],
+    "baseUrl": ".",
     "paths": { "@ts-task/utils": ["./src/ts-task-utils"] }
   },
   "include": [
