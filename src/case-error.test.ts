@@ -3,11 +3,15 @@ import { assertFork, jestAssertNever, jestAssertUntypedNeverCalled } from './tes
 import { caseError } from './case-error';
 
 class DivisionByZeroError extends Error {
-  type = 'DivisionByZeroError';
+  private type = 'DivisionByZeroError';
 }
 
-class DontLikePairsError extends Error {
-  type = 'IDontLikePairsError';
+class DontLikeEvenNumbersError extends Error {
+  type = 'DontLikeEvenNumbersError';
+
+  constructor (public evenNumber: number) {
+    super(`Ugh! ${evenNumber} is an even number!`);
+  }
 }
 
 class NewTypeOfError extends Error {
@@ -23,9 +27,9 @@ function divideTask(numerator: number, denominator: number): Task<number, Divisi
   }
 }
 
-function rejectPairsTaks(n: number): Task<number, DontLikePairsError> {
+function rejectPairsTaks(n: number): Task<number, DontLikeEvenNumbersError> {
   if (n % 2 === 0) {
-    return Task.reject(new DontLikePairsError())
+    return Task.reject(new DontLikeEvenNumbersError(n))
   } else {
     return Task.resolve(n)
   }
@@ -64,7 +68,7 @@ describe('caseError:', () => {
   })
 
   it('Should leave untouched an unmatched error', cb => {
-    // GIVEN: A task that fails with IDontLikePairsError
+    // GIVEN: A task that fails with DontLikeEvenNumbersError
     const task = divideAndRejectPairs(4, 2)
 
     // WHEN: We catch the wrong exception trying to reject with a new error
@@ -75,7 +79,7 @@ describe('caseError:', () => {
     //       the resulting type has the new rejected type as a posibility
     //       and the task is rejected with the original error
     result.fork(
-      assertFork(cb, err => expect(err).toBeInstanceOf(DontLikePairsError)),
+      assertFork(cb, err => expect(err).toBeInstanceOf(DontLikeEvenNumbersError)),
       jestAssertUntypedNeverCalled(cb)
     )
   })
@@ -93,16 +97,17 @@ describe('caseError:', () => {
         )
       )
       .catch(
-        caseError(DontLikePairsError, _ =>
-          Task.resolve('Could not compute: IDontLikePairsError ocurred')
+        caseError(DontLikeEvenNumbersError, _ =>
+          Task.resolve('Could not compute: DontLikeEvenNumbersError ocurred')
         )
       )
       .catch(
         caseError(UncaughtError, err => Task.resolve(`Could not compute: UncaughtError ${err}`))
       )
+      ;
     // THEN: The resulting type doesn't have the catched errors
     //       and the task is resolved with the mapped answer
-    result.fork(jestAssertNever(cb), assertFork(cb, s => expect(s).toBe('The result is 5')))
+    result.fork(jestAssertNever(cb), assertFork(cb, s => expect(s).toBe('The result is 5')));
   })
 
   it('Should not compile when trying to catch an error that isnt throwed', cb => {
@@ -112,8 +117,8 @@ describe('caseError:', () => {
     // WHEN: We catch an imposible exception
     const result = task.catch(
       caseError(
-        DontLikePairsError, // TODO: It would be nice to see this fail compilation as it is not possible that
-        //       task fails with IDontLikePairsError
+        DontLikeEvenNumbersError, // TODO: It would be nice to see this fail compilation as it is not possible that
+        //       task fails with DontLikeEvenNumbersError
         _ => Task.resolve(0)
       )
     )
