@@ -91,23 +91,19 @@ describe('caseError:', () => {
     // WHEN: We try to catch every possible error
     const result = task
       .map(n => `The result is ${n}`)
-      .pipe(t => t)
       .catch(
         caseError(DivisionByZeroError, _ =>
           Task.resolve('Could not compute: DivisionByZeroError ocurred')
         )
       )
-      .pipe(t => t)
       .catch(
         caseError(DontLikeEvenNumbersError, _ =>
           Task.resolve('Could not compute: DontLikeEvenNumbersError ocurred')
         )
       )
-      .pipe(t => t)
       .catch(
         caseError(UncaughtError, err => Task.resolve(`Could not compute: UncaughtError ${err}`))
       )
-      .pipe(t => t)
       ;
     // THEN: The resulting type doesn't have the catched errors
     //       and the task is resolved with the mapped answer
