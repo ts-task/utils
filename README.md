@@ -10,7 +10,7 @@ Utils _functions_ to use with [Task](https://github.com/ts-task/task).
 
 `isInstanceOf(Constructor1, Constructor2, ...) => (instance: any) => instance is Constructor1 | Constructor2 | ...`
 
-`isInstanceOf` takes any number of _constructors_ (or _classes_) and returns a function that tells us if an object is an instance of any of those _constructors_. In case it is, it is also typed as well (see [_type guards_](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)).
+It is an util function to use with [`caseError`](https://github.com/ts-task/utils#caseerror). `isInstanceOf` takes any number of _constructors_ (or _classes_) and returns a function that tells us if an object is an instance of any of those _constructors_. In case it is, it is also typed as well (see [_type guards_](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)).
 
 ```typescript
 class Dog {
