@@ -6,8 +6,46 @@ Utils _functions_ to use with [Task](https://github.com/ts-task/task).
 
 ## API
 
+### `isInstanceOf`
+
+`isInstanceOf(Constructor1, Constructor2, ...) => (instance: any) => instance is Constructor1 | Constructor2 | ...`
+
+`isInstanceOf` takes any number of _constructors_ (or _classes_) and returns a function that tells us if an object is an instance of any of those _constructors_. In case it is, it is also typed as well (see [_type guards_](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)).
+
+```typescript
+class Dog {
+	bark () {
+		return 'WOOF!';
+	}
+}
+
+class Cat {
+	meow () {
+		return 'Meeeeeoooooooow';
+	}
+}
+
+const isDog = isInstanceOf(Dog);
+
+// This example is only for demonstration porpuses.
+// I should actually prefer the animals to be polymorphic.
+const talk = (animal: Dog | Cat) => {
+	if (isDog(animal)) {
+		// animal is typed as Dog
+		animal.bark();
+	}
+	else {
+		// animal is typed as Cat
+		animal.meow();
+	}	
+}
+```
+
 ### `caseError`
-`caseError` _function_ is used to handle errors of an specific type (_instance of_ the specified `Error`) with a _callback_.
+
+`caseError(predicate, errHandler)`
+
+`caseError` takes a _predicate_ (a _function_ to a `boolean`) and an _error handler_. If `predicate` returns `true` when called with the _rejected error_, then `errHandler` is called with the error and it's return value is returned. Else, the _rejected error_ is rejected again.
 
 ```typescript
 import { Task } from '@ts-task/task';
@@ -25,9 +63,13 @@ rejectedTask
 		// err is FooError | BarError
 		Task.reject(err)
 	)
-	.catch(caseError(FooError, err =>
-		// err is a FooError
-		Task.resolve('foo ' + err.toString()))
+	.catch(
+		caseError(
+			isInstanceOf(FooError),
+			err =>
+				// err is a FooError
+				Task.resolve('foo ' + err.toString())
+		)
 	)
 	.catch(err =>
 		// err is a BarError (since the FooError case was resolved)
@@ -36,9 +78,11 @@ rejectedTask
 ;
 ```
 
-> Note: have in mind that TypeScript does duck typing checks, hence `FooError` and `BarError` should have different _properties_ to let TypeScript infere they are different.
+> Note: have in mind that TypeScript does duck typing checks, hence `FooError` and `BarError` should have different _properties_ to let TypeScript infere they are different, since TypeScript has _structural typing_ instead of _nominal typing_.
 
 ### `toPromise`
+
+`toPromise(task)`
 
 `toPromise` _function_ naturally transforms a `Task` into a `Promise`.
 
@@ -61,6 +105,8 @@ const rejectedPromise = toPromise(rejectedTask);
 ```
 
 ### `share`
+
+`task.pipe(share())`
 
 As `Tasks` are _lazy_, the `Task`'s code isn't executed until it's resolved. But, for the same reason the `Task`'s code is executed each time it is `fork`ed (_operators_ - including `.map`, `.chain` and `.catch` _methods_ -  do `fork` the `Task`). `share` _function_ is an _operator_ that resolves the `Task` to that point and returns a `Task` _resolved_ (or _rejected_) with that value, so original `Task`'s code is executed only once.
 
