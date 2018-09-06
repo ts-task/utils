@@ -29,12 +29,12 @@ const isNoNegativesError = (err: any): err is NoNegativesError =>
 const aNumber = rejectNegative(9); // $ExpectType Task<number, NoNegativesError>
 
 // ...the other one is `anotherNumber`, whose type is
-const anotherNumber = aNumber // $ExpectType Task<number, NoNegativesError | UncaughtError>
+const anotherNumber = aNumber // $ExpectType Task<number, NoNegativesError | UnknownError>
   .map(x => x)
 ;
 
 // The only difference between both variables is that `anotherNumber` is possibly rejected
-// with two different errors (`NoNegativesError` and `UncaughtError`), while `aNumber` is
+// with two different errors (`NoNegativesError` and `UnknownError`), while `aNumber` is
 // possible rejected with only one error (`NoNegativesError`).
 
 // We will also need a function `fixNoNegativesError` that should handle (and resolve)
@@ -46,8 +46,8 @@ const result = aNumber.catch(fixNoNegativesError);
 const anotherResult = anotherNumber.catch(fixNoNegativesError);
 
 // And in both cases we expect the results to be:
-result; // $ExpectType Task<number, UncaughtError>
-anotherResult; // $ExpectType Task<number, UncaughtError>
+result; // $ExpectType Task<number, UnknownError>
+anotherResult; // $ExpectType Task<number, UnknownError>
 
-// Notice how the `UncaughtError` is present in both results. In `result`
+// Notice how the `UnknownError` is present in both results. In `result`
 // it is because of the `.catch` method. In `anotherResult` it was already present before.

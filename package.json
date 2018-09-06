@@ -109,6 +109,6 @@
     "validate-commit-msg": "^2.12.2"
   },
   "dependencies": {
-    "@ts-task/task": "0.4.0"
+    "@ts-task/task": "^1.0.0"
   }
 }

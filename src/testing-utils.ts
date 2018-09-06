@@ -1,6 +1,6 @@
-import { UncaughtError } from '@ts-task/task'
+import { UnknownError } from '@ts-task/task'
 
-export const jestAssertNever = (cb: jest.DoneCallback) => (obj: never | UncaughtError) =>
+export const jestAssertNever = (cb: jest.DoneCallback) => (obj: never | UnknownError) =>
   cb('this should never happen', obj)
 
 export const jestAssertUntypedNeverCalled = (cb: jest.DoneCallback) => (obj: any) =>

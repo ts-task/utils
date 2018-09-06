@@ -1,4 +1,4 @@
-import { Task, UncaughtError } from '@ts-task/task';
+import { Task, UnknownError } from '@ts-task/task';
 import { assertFork, jestAssertNever, jestAssertUntypedNeverCalled } from './testing-utils';
 import { caseError } from './case-error';
 
@@ -123,10 +123,10 @@ describe('caseError:', () => {
       )
       .catch(
         caseError(
-          (err: any): err is UncaughtError =>
-            err instanceof UncaughtError,
+          (err: any): err is UnknownError =>
+            err instanceof UnknownError,
           err =>
-            Task.resolve(`Could not compute: UncaughtError ${err}`)
+            Task.resolve(`Could not compute: UnknownError ${err}`)
         )
       )
     ;

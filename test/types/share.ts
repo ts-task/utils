@@ -22,5 +22,5 @@ const sharedNumber = tNumber
 	.pipe(share())
 ;
 
-// THEN: we get a Task typed like the original one (but possible rejected with an UncaughtError)
-sharedNumber;  // $ExpectType Task<number, UncaughtError | NoNegativesError>
+// THEN: we get a Task typed like the original one (but possible rejected with an UnknownError)
+sharedNumber;  // $ExpectType Task<number, UnknownError | NoNegativesError>

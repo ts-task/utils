@@ -24,7 +24,7 @@ const task = Task
 	.chain(x => x > 0 ? Task.resolve(x) : Task.reject(new Baz()))
 ;
 
-task; // $ExpectType Task<number, UncaughtError | Foo | Bar | Baz>
+task; // $ExpectType Task<number, UnknownError | Foo | Bar | Baz>
 
 // If we handle the Foo errors
 const fooHandled = task
@@ -35,7 +35,7 @@ const fooHandled = task
 ;
 
 // ...we get a Task that is NOT rejected with the Foo errors
-fooHandled; // $ExpectType Task<number, UncaughtError | Bar | Baz>
+fooHandled; // $ExpectType Task<number, UnknownError | Bar | Baz>
 
 // If we handle the Foo and the Bar errors
 const fooAndBarHandled = task
@@ -46,7 +46,7 @@ const fooAndBarHandled = task
 ;
 
 // ...we get a Task that is neither rejected with the Foo or the Bar errors
-fooAndBarHandled; // $ExpectType Task<number, UncaughtError | Baz>
+fooAndBarHandled; // $ExpectType Task<number, UnknownError | Baz>
 
 // If we transform that last Task's Baz error into Bar error
 const bazTransformedToBar = fooAndBarHandled
@@ -56,5 +56,5 @@ const bazTransformedToBar = fooAndBarHandled
 	))
 ;
 
-// We get a Task whose error is Bar (or UncaughtError)
-bazTransformedToBar; // $ExpectType Task<number, UncaughtError | Bar>
+// We get a Task whose error is Bar (or UnknownError)
+bazTransformedToBar; // $ExpectType Task<number, UnknownError | Bar>
