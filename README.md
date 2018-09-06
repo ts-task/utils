@@ -14,15 +14,15 @@ Utils _functions_ to use with [Task](https://github.com/ts-task/task).
 
 ```typescript
 class Dog {
-	bark () {
-		return 'WOOF!';
-	}
+    bark () {
+        return 'WOOF!';
+    }
 }
 
 class Cat {
-	meow () {
-		return 'Meeeeeoooooooow';
-	}
+    meow () {
+        return 'Meeeeeoooooooow';
+    }
 }
 
 const isDog = isInstanceOf(Dog);
@@ -30,14 +30,14 @@ const isDog = isInstanceOf(Dog);
 // This example is only for demonstration porpuses.
 // I should actually prefer the animals to be polymorphic.
 const talk = (animal: Dog | Cat) => {
-	if (isDog(animal)) {
-		// animal is typed as Dog
-		animal.bark();
-	}
-	else {
-		// animal is typed as Cat
-		animal.meow();
-	}	
+    if (isDog(animal)) {
+        // animal is typed as Dog
+        animal.bark();
+    }
+    else {
+        // animal is typed as Cat
+        animal.meow();
+    }
 }
 ```
 
@@ -53,28 +53,28 @@ import { caseError } from '@ts-task/utils';
 
 // rejectedTask is a Task<never, FooError | BarError>
 const rejectedTask = Task.reject(
-		Math.random() > 0.5 ?
-			new FooError() :
-			new BarError()
-	);
+        Math.random() > 0.5 ?
+            new FooError() :
+            new BarError()
+    );
 
 rejectedTask
-	.catch(err =>
-		// err is FooError | BarError
-		Task.reject(err)
-	)
-	.catch(
-		caseError(
-			isInstanceOf(FooError),
-			err =>
-				// err is a FooError
-				Task.resolve('foo ' + err.toString())
-		)
-	)
-	.catch(err =>
-		// err is a BarError (since the FooError case was resolved)
-		Task.reject(err)
-	)
+    .catch(err =>
+        // err is FooError | BarError
+        Task.reject(err)
+    )
+    .catch(
+        caseError(
+            isInstanceOf(FooError),
+            err =>
+                // err is a FooError
+                Task.resolve('foo ' + err.toString())
+        )
+    )
+    .catch(err =>
+        // err is a BarError (since the FooError case was resolved)
+        Task.reject(err)
+    )
 ;
 ```
 
@@ -115,12 +115,12 @@ import { Task } from '@ts-task/task';
 import { share } from '@ts-task/utils';
 
 const task = new Task<string, never>(resolve => {
-	console.log('Task\'s code is called');
-	resolve('Foo');
+    console.log('Task\'s code is called');
+    resolve('Foo');
 });
 
 const sharedTask = task
-	.pipe(share);
+    .pipe(share);
 
 sharedTask.fork(err => console.log(err), val => console.log(val));
 sharedTask.fork(err => console.log(err), val => console.log(val));
