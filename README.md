@@ -1,5 +1,8 @@
 # @ts-task/utils
-
+[![Npm version](https://img.shields.io/npm/v/@ts-task/utils.svg)](https://www.npmjs.com/package/@ts-task/utils)
+[![Build Status](https://travis-ci.com/ts-task/utils.svg?branch=master)](https://travis-ci.com/ts-task/utils)
+[![Coverage Status](https://coveralls.io/repos/github/ts-task/utils/badge.svg?branch=master)](https://coveralls.io/github/ts-task/utils?branch=master)
+![npm bundle size (minified)](https://img.shields.io/bundlephobia/min/@ts-task/utils.svg)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 Utils _functions_ to use with [Task](https://github.com/ts-task/task).
