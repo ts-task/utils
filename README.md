@@ -107,6 +107,31 @@ const rejectedTask = Task.resolve(new Error());
 const rejectedPromise = toPromise(rejectedTask);
 ```
 
+### `tap`
+
+The `tap` _function_ can be found in other libraries. It takes a `callback` and returns a function that invokes the `callback` with the _parameter_ and pass it through. It's useful when you need to perform some side effect. Suppose you need to log the _resolved value_ at certain point of a `Task` _method chaining_. Without the `tap` _function_ you would probably do something like:
+
+```typescript
+Task
+    .resolve(0)
+    // <Some code here...>
+    .map(resolvedValue => {
+        console.log(resolvedValue);
+        return resolvedValue;
+    })
+    // <And more code here...>
+```
+
+You can't use an _inline function_ nor a _point-free_ style because you don't want the _log_ to change the `Task`'s _resolved value_, so you need to _return_ it. It's way more fancier and handy to just use the `tap` _function_:
+
+```typescript
+Task
+    .resolve(0)
+    // <Some code here...>
+    .map(tap(x => console.log(x)))
+    // <And more code here...>
+```
+
 ### `share`
 
 `task.pipe(share())`
