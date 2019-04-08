@@ -9,39 +9,30 @@ Utils _functions_ to use with [Task](https://github.com/ts-task/task).
 
 ## API
 
-### `isInstanceOf`
+### `allProperties`
 
-`isInstanceOf(Constructor1, Constructor2, ...) => (instance: any) => instance is Constructor1 | Constructor2 | ...`
+`allProperties(object)`
 
-It is an util function to use with [`caseError`](https://github.com/ts-task/utils#caseerror). `isInstanceOf` takes any number of _constructors_ (or _classes_) and returns a function that tells us if an object is an instance of any of those _constructors_. In case it is, it is also typed as well (see [_type guards_](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)).
+`allProperties` works similar to Task.all but for objects instead of array. It traverses an object whose values are Tasks and returns a new Task of the resolved object. The returned Task can fail with the sum of the individual errors.
 
 ```typescript
-class Dog {
-    bark () {
-        return 'WOOF!';
-    }
+import { Task } from '@ts-task/task';
+import { allProperties } from '@ts-task/utils';
+
+class CustomError {
 }
 
-class Cat {
-    meow () {
-        return 'Meeeeeoooooooow';
-    }
-}
+const obj = {
+    name: Task.resolve<string, Error>('Async name'),
+    age: Task.resolve<number, CustomError>(29)
+};
 
-const isDog = isInstanceOf(Dog);
-
-// This example is only for demonstration porpuses.
-// I should actually prefer the animals to be polymorphic.
-const talk = (animal: Dog | Cat) => {
-    if (isDog(animal)) {
-        // animal is typed as Dog
-        animal.bark();
-    }
-    else {
-        // animal is typed as Cat
-        animal.meow();
-    }
-}
+allProperties(obj).fork(
+    // Err can be Error or CustomError
+    err => console.error(err)
+    // Val is an object, val.name is a string and val.age is a number
+    val => console.log(val)
+);
 ```
 
 ### `caseError`
@@ -82,6 +73,41 @@ rejectedTask
 ```
 
 > Note: have in mind that TypeScript does duck typing checks, hence `FooError` and `BarError` should have different _properties_ to let TypeScript infere they are different, since TypeScript has _structural typing_ instead of _nominal typing_.
+
+### `isInstanceOf`
+
+`isInstanceOf(Constructor1, Constructor2, ...) => (instance: any) => instance is Constructor1 | Constructor2 | ...`
+
+It is an util function to use with [`caseError`](https://github.com/ts-task/utils#caseerror). `isInstanceOf` takes any number of _constructors_ (or _classes_) and returns a function that tells us if an object is an instance of any of those _constructors_. In case it is, it is also typed as well (see [_type guards_](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)).
+
+```typescript
+class Dog {
+    bark () {
+        return 'WOOF!';
+    }
+}
+
+class Cat {
+    meow () {
+        return 'Meeeeeoooooooow';
+    }
+}
+
+const isDog = isInstanceOf(Dog);
+
+// This example is only for demonstration porpuses.
+// I should actually prefer the animals to be polymorphic.
+const talk = (animal: Dog | Cat) => {
+    if (isDog(animal)) {
+        // animal is typed as Dog
+        animal.bark();
+    }
+    else {
+        // animal is typed as Cat
+        animal.meow();
+    }
+}
+```
 
 ### `toPromise`
 
@@ -130,6 +156,36 @@ sharedTask.fork(err => console.log(err), val => console.log(val));
 sharedTask.fork(err => console.log(err), val => console.log(val));
 
 // The message "Task's code is called" will be logged only once (even when forking multiple times).
+```
+
+## Type Helpers
+Thanks to the introduction of conditional types in version 2.8 we can create type helpers that let us know the type of the value or possible errors.
+
+
+```typescript
+import { Task } from '@ts-task/task';
+import { TaskValue, TaskError } from '@ts-task/utils';
+
+const t1 = Task.resolve(1);
+type T1 = TaskValue<typeof t1>;
+
+// $ExpectType number
+const n: T1 = 1;
+
+const e1 = Task.reject('oh no');
+type E1 = TaskError<typeof e1>;
+
+// $ExpectType string
+const s: E1 = 'oh no';
+```
+
+This can be used in conjunction with other type functions to name the type of a complex expression
+
+```typescript
+type UserWithComments = TaskValue<ReturnType<getUserWithComments>>;
+
+const getUserWithComments = (id: number) =>
+    getUser(id).chain(getComments);
 ```
 
 ## Credits
