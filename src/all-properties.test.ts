@@ -33,7 +33,7 @@ describe('allProperties:', () => {
     );
   });
 
-  it('Should resolve succesfully with multible task', cb => {
+  it('Should resolve succesfully with multiple task', cb => {
     // GIVEN: An object with multiple task
     const obj = {
       a: Task.resolve('a'),
