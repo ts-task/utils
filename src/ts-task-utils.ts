@@ -4,3 +4,4 @@ export * from './operators/share';
 export * from './is-instance-of';
 export * from './type-helpers';
 export * from './all-properties';
+export * from './operators/try-catch';
