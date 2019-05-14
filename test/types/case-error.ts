@@ -26,10 +26,10 @@ const isNoNegativesError = (err: any): err is NoNegativesError =>
 // We will tests our `caseError` function with two variables
 // (that is because of a bug we had with the Tasks rejected with only one possible type),
 // one is `aNumber`, whose type is
-const aNumber = rejectNegative(9); // $ExpectType Task<number, NoNegativesError>
+const aNumber = rejectNegative(9 as number); // $ExpectType Task<number, NoNegativesError>
 
 // ...the other one is `anotherNumber`, whose type is
-const anotherNumber = aNumber // $ExpectType Task<number, NoNegativesError | UnknownError>
+const anotherNumber = aNumber // $ExpectType Task<number, UnknownError | NoNegativesError>
   .map(x => x)
 ;
 

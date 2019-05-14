@@ -108,6 +108,30 @@ const talk = (animal: Dog | Cat) => {
     }
 }
 ```
+### `share`
+
+`task.pipe(share())`
+
+As `Tasks` are _lazy_, the `Task`'s code isn't executed until it's resolved. But, for the same reason the `Task`'s code is executed each time it is `fork`ed (_operators_ - including `.map`, `.chain` and `.catch` _methods_ -  do `fork` the `Task`). `share` _function_ is an _operator_ that resolves the `Task` to that point and returns a `Task` _resolved_ (or _rejected_) with that value, so original `Task`'s code is executed only once.
+
+```typescript
+import { Task } from '@ts-task/task';
+import { share } from '@ts-task/utils';
+
+const task = new Task<string, never>(resolve => {
+    console.log('Task\'s code is called');
+    resolve('Foo');
+});
+
+const sharedTask = task
+    .pipe(share);
+
+sharedTask.fork(err => console.log(err), val => console.log(val));
+sharedTask.fork(err => console.log(err), val => console.log(val));
+sharedTask.fork(err => console.log(err), val => console.log(val));
+
+// The message "Task's code is called" will be logged only once (even when forking multiple times).
+```
 
 ### `toPromise`
 
@@ -133,29 +157,38 @@ const rejectedTask = Task.resolve(new Error());
 const rejectedPromise = toPromise(rejectedTask);
 ```
 
-### `share`
+### `tryCatch`
 
-`task.pipe(share())`
+`tryCatch(mapFn, handler)`
 
-As `Tasks` are _lazy_, the `Task`'s code isn't executed until it's resolved. But, for the same reason the `Task`'s code is executed each time it is `fork`ed (_operators_ - including `.map`, `.chain` and `.catch` _methods_ -  do `fork` the `Task`). `share` _function_ is an _operator_ that resolves the `Task` to that point and returns a `Task` _resolved_ (or _rejected_) with that value, so original `Task`'s code is executed only once.
+`tryCatch` works like map but inside a try catch block. If the function throws the handler is executed with the thrown error.
 
 ```typescript
 import { Task } from '@ts-task/task';
-import { share } from '@ts-task/utils';
+import { tryCatch } from '@ts-task/utils';
 
-const task = new Task<string, never>(resolve => {
-    console.log('Task\'s code is called');
-    resolve('Foo');
-});
+// Try Catch can be useful to type the error
+Task.resolve('{some invalid json').pipe(
+  tryCatch(
+    str => JSON.parse(str),
+    err => err as SyntaxError
+  )
+) // $ExpectType Task<any, UnknownError | SyntaxError>
 
-const sharedTask = task
-    .pipe(share);
+// Or even wrap it in another object
+class ParsingCustomError {
+  constructor (public error: SyntaxError) {
+    this.message = 'custom message';
+  }
+}
 
-sharedTask.fork(err => console.log(err), val => console.log(val));
-sharedTask.fork(err => console.log(err), val => console.log(val));
-sharedTask.fork(err => console.log(err), val => console.log(val));
+Task.resolve('{some invalid json').pipe(
+  tryCatch(
+    str => JSON.parse(str),
+    err => new ParsingCustomError(err)
+  )
+) // $ExpectType Task<any, UnknownError | ParsingCustomError>
 
-// The message "Task's code is called" will be logged only once (even when forking multiple times).
 ```
 
 ## Type Helpers
