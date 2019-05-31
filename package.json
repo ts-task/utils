@@ -29,7 +29,6 @@
     "deploy-docs": "ts-node tools/gh-pages-publish",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "g-cz",
-    "semantic-releitase": "semantic-release",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
     "precommit-disabled": "lint-staged",
     "contributors-add": "all-contributors add",

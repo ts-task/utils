@@ -2,18 +2,26 @@ language: node_js
 branches:
   only:
     - master
+    - develop
     - /^greenkeeper/.*$/
-cache:
-  yarn: true
-  directories:
-    - node_modules
 notifications:
   email: false
 node_js:
   - node
 script:
   - npm run test:prod && npm run build
-after_success:
-  - npm run report-coverage
-  - npm run deploy-docs
-  - npm run semantic-release
+
+before_deploy: npm version --git-tag-version=false "1.1.0-RC.$TRAVIS_BUILD_NUMBER"
+
+deploy:
+  - provider: script
+    script: ./tools/deploy_new_release.sh
+    on:
+      branch: master
+  - provider: npm
+    skip_cleanup: true
+    email: "$NPM_EMAIL"
+    api_key: "$NPM_TOKEN"
+    tag: next
+    on:
+      branch: develop
